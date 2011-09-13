@@ -1,14 +1,33 @@
-//
-//  HelloWorldLayer.m
-//  NDControlButtonExample
-//
-//  Created by Eric Yim on 11-09-12.
-//  Copyright N/A 2011. All rights reserved.
-//
+/*
+ * HelloWorldLayer.m
+ * 
+ * Copyright 2011 Eric Yim.
+ * Created by Eric Yim on 11-09-12.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to 
+ * deal in the Software without restriction, including without limitation the 
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+ * IN THE SOFTWARE.
+ *
+ */
 
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
+#import "NDControlButton.h"
 
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
@@ -36,7 +55,7 @@
 	if( (self=[super init])) {
 		
 		// create and initialize a Label
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello World" fontName:@"Marker Felt" fontSize:64];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"No Event" fontName:@"Marker Felt" fontSize:64];
 
 		// ask director the the window size
 		CGSize size = [[CCDirector sharedDirector] winSize];
@@ -45,19 +64,79 @@
 		label.position =  ccp( size.width /2 , size.height/2 );
 		
 		// add the label as a child to this Layer
-		[self addChild: label];
+		[self addChild: label z:1 tag:kLabelTag];
+        
+        CCSprite *normal = [CCSprite spriteWithFile:@"Icon-Small.png"];
+        CCSprite *selected = [CCSprite spriteWithFile:@"Icon-Small.png"];
+        selected.opacity = 180;
+        // create button with above sprites
+        NDControlButton *button = [NDControlButton buttonWithNormalSprite:normal 
+                                                           selectedSprite:selected];
+        // position button
+        button.position = ccp(0.5 * size.width, 100.0f);
+        // add button to layer
+        [self addChild:button z:1 tag:kButtonTag];
+        
+        // setup event handlers
+        [button addTarget:self action:@selector(touchDown:) forControlEvents:CCControlEventTouchDown];
+        [button addTarget:self action:@selector(touchDragInside:) forControlEvents:CCControlEventTouchDragInside];
+        [button addTarget:self action:@selector(touchDragOutside:) forControlEvents:CCControlEventTouchDragOutside];
+        [button addTarget:self action:@selector(touchDragEnter:) forControlEvents:CCControlEventTouchDragEnter];
+        [button addTarget:self action:@selector(touchDragExit:) forControlEvents:CCControlEventTouchDragExit];
+        [button addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
+        [button addTarget:self action:@selector(touchUpOutside:) forControlEvents:CCControlEventTouchUpOutside];
+        [button addTarget:self action:@selector(touchCancel:) forControlEvents:CCControlEventTouchCancel];
+        // NDControlButton doesn't support value changed events
+        [button addTarget:self action:@selector(valueChanged:) forControlEvents:CCControlEventValueChanged];
 	}
 	return self;
 }
 
-// on "dealloc" you need to release all your retained objects
-- (void) dealloc
-{
-	// in case you have something to dealloc, do it in this method
-	// in this particular example nothing needs to be released.
-	// cocos2d will automatically release all the children (Label)
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
+#pragma Event Handlers
+
+- (void)touchDown:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Touch down!"];
 }
+
+- (void)touchDragInside:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Drag inside."];
+}
+
+- (void)touchDragOutside:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Drag outside."];
+}
+
+- (void)touchDragEnter:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Drag enter."];
+}
+
+- (void)touchDragExit:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Drag exit."];
+}
+
+- (void)touchUpInside:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Touch up inside."];
+}
+
+- (void)touchUpOutside:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Touch up outside."];
+}
+
+- (void)touchCancel:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Touch cancelled."];
+}
+
+- (void)valueChanged:(NDControlButton *)sender {
+    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+    label.string = [NSString stringWithFormat:@"Value changed?"];
+}
+
 @end
