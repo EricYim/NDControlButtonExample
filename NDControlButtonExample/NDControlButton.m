@@ -26,29 +26,55 @@
 
 #import "NDControlButton.h"
 
+@interface NDControlButton (PrivateMethods)
+- (CCSprite *)disabledSpriteForNormalSprite:(CCSprite *)normalSprite;
+@end
+
 @implementation NDControlButton
 
 + (id)buttonWithNormalSprite:(CCSprite *)normalSprite {
     return [[[self alloc] initWithNormalSprite:normalSprite] autorelease];
 }
 
++ (id)buttonWithNormalSprite:(CCSprite *)normalSprite disabledSprite:(CCSprite *)disabledSprite {
+    return [[[self alloc] initWithNormalSprite:normalSprite disabledSprite:disabledSprite] autorelease];
+}
+
 + (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite {
     return [[[self alloc] initWithNormalSprite:normalSprite selectedSprite:selectedSprite] autorelease];
+}
+
++ (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite disabledSprite:(CCSprite *)disabledSprite {
+    return [[[self alloc] initWithNormalSprite:normalSprite selectedSprite:selectedSprite disabledSprite:disabledSprite] autorelease];
 }
 
 + (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite {
     return [[[self alloc] initWithNormalSprite:normalSprite selectedSprite:selectedSprite highlightedSprite:highlightedSprite] autorelease];
 }
 
++ (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite disabledSprite:(CCSprite *)disabledSprite {
+    return [[[self alloc] initWithNormalSprite:normalSprite selectedSprite:selectedSprite highlightedSprite:highlightedSprite disabledSprite:disabledSprite] autorelease];
+}
+
 // Convenient init
 - (id)initWithNormalSprite:(CCSprite *)normalSprite {
+    return [self initWithNormalSprite:normalSprite disabledSprite:[self disabledSpriteForNormalSprite:normalSprite]];
+}
+
+// Convenient init
+- (id)initWithNormalSprite:(CCSprite *)normalSprite disabledSprite:(CCSprite *)disabledSprite {
     // Duplicates normalSprite since no selected sprite is provided.
     CCSprite *selectedSprite = [CCSprite spriteWithTexture:normalSprite.texture];
-    return [self initWithNormalSprite:normalSprite selectedSprite:selectedSprite];
+    return [self initWithNormalSprite:normalSprite selectedSprite:selectedSprite disabledSprite:disabledSprite];
 }
 
 // Convenient init
 - (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite {
+    return [self initWithNormalSprite:normalSprite selectedSprite:selectedSprite disabledSprite:[self disabledSpriteForNormalSprite:normalSprite]];
+}
+
+// Convenient init
+- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite disabledSprite:(CCSprite *)disabledSprite {
     CCSprite *highlightedSprite = nil;
     
 #ifdef __MAC_OS_X_VERSION_MAX_ALLOWED
@@ -56,14 +82,20 @@
     highlightedSprite = [CCSprite spriteWithTexture:normalSprite.texture];
 #endif
     
-    return [self initWithNormalSprite:normalSprite selectedSprite:selectedSprite highlightedSprite:highlightedSprite];
+    return [self initWithNormalSprite:normalSprite selectedSprite:selectedSprite highlightedSprite:highlightedSprite disabledSprite:disabledSprite];
+}
+
+// Convenient init
+- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite {
+    return [self initWithNormalSprite:normalSprite selectedSprite:selectedSprite highlightedSprite:highlightedSprite disabledSprite:[self disabledSpriteForNormalSprite:normalSprite]];
 }
 
 // Designated init
-- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite {
+- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite disabledSprite:(CCSprite *)disabledSprite {
     // Prohibits nil params
     NSAssert(normalSprite != nil, @"Attempt to initialize with a nil normal sprite.");
     NSAssert(selectedSprite != nil, @"Attempt to initialize with a nil selected sprite.");
+    NSAssert(disabledSprite != nil, @"Attempt to initialize with a nil disabled sprite.");
 #ifdef __MAC_OS_X_VERSION_MAX_ALLOWED    
     NSAssert(highlightedSprite != nil, @"Attempt to initialize with a nil highlighted sprite.");
 #endif
@@ -80,6 +112,11 @@
         selectedSprite.position = self.childrenAnchorPointInPixels;
         [self addChild:selectedSprite z:1 tag:kSelectedSpriteTag];
         
+        // Hides disabled sprite
+        disabledSprite.visible = NO;
+        disabledSprite.position = self.childrenAnchorPointInPixels;
+        [self addChild:disabledSprite z:1 tag:kDisabledSpriteTag];
+        
         if (highlightedSprite != nil) {
             // Hides highlighted sprite
             highlightedSprite.visible = NO;
@@ -90,6 +127,24 @@
     }
     
     return self;
+}
+
+#pragma mark Properties
+
+- (void)setEnabled:(BOOL)enabled {
+    if (enabled != enabled_) {
+        enabled_ = enabled;
+        [self unselect];
+        
+        CCSprite *normalSprite = (CCSprite *)[self getChildByTag:kNormalSpriteTag];
+        CCSprite *disabledSprite = (CCSprite *)[self getChildByTag:kDisabledSpriteTag];
+        
+        if (!enabled) {
+            state_ = CCControlStateDisabled;
+        }
+        normalSprite.visible = enabled;
+        disabledSprite.visible = !enabled;
+    }
 }
 
 #pragma mark Refactored public methods
@@ -176,5 +231,17 @@
 }
 
 #endif
+
+@end
+
+@implementation NDControlButton (PrivateMethods)
+
+- (CCSprite *)disabledSpriteForNormalSprite:(CCSprite *)normalSprite {
+    // Duplicates normalSprite since no disabled sprite is provided.
+    CCSprite *disabledSprite = [CCSprite spriteWithTexture:normalSprite.texture];
+    // Makes disabledSprite translucent
+    disabledSprite.opacity = 128;
+    return disabledSprite;
+}
 
 @end

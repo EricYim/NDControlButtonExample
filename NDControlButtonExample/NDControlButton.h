@@ -38,6 +38,7 @@
         kNormalSpriteTag,
         kSelectedSpriteTag,
         kHighlightedSpriteTag,
+        kDisabledSpriteTag,
     };
     /** Boolean flag for tracking drag proximity. */
     BOOL interiorDrag_;
@@ -51,11 +52,24 @@
  */
 + (id)buttonWithNormalSprite:(CCSprite *)normalSprite;
 
+/** Creates button with normal & disabled sprites.
+ *
+ * @see initWithNormalSprite:disabledSprite:
+ */
++ (id)buttonWithNormalSprite:(CCSprite *)normalSprite disabledSprite:(CCSprite *)disabledSprite;
+
 /** Creates button with normal and selected sprites.
  *
  * @see initWithNormalSprite:selectedSprite:
  */
 + (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite;
+
+/** Creates button with normal, selected and disabled sprites.
+ *
+ * @see initWithNormalSprite:selectedSprite:disabledSprite:
+ */
++ (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite disabledSprite:(CCSprite *)disabledSprite;
+
 
 /** Creates button with normal, selected and highlighted sprites.
  *
@@ -63,35 +77,69 @@
  */
 + (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite;
 
-/** Convenient init - takes only normal sprite as parameter; calls 
- * initWithNormalSprite:selectedSprite: internally.
+/** Creates button with normal, selected, highlighted and disabled sprites.
  *
- * @param normalSprite CCSprite that is used as button's normal-state graphics. 
- * It is internally duplicated to create the selected sprite.
+ * @see initWithNormalSprite:selectedSprite:highlightedSprite:disabledSprite:
+ */
++ (id)buttonWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite disabledSprite:(CCSprite *)disabledSprite;
+
+
+/** Convenient init - takes only normal sprite as parameter; duplicates 
+ * normal sprite to create disabled sprite and calls 
+ * initWithNormalSprite:disabledSprite: internally.
+ *
+ * @see initWithNormalSprite:disabledSprite:
  */
 - (id)initWithNormalSprite:(CCSprite *)normalSprite;
 
-/** Convenient init - takes only normal and selected sprites as parameter; calls 
- * initWithNormalSprite:selectedSprite:highlightedSprite: internally.
+/** Convenient init - takes only normal and disabled sprites as parameters;
+ * duplicates normal sprite to create selected sprite and calls 
+ * initWithNormalSprite:selectedSprite:disabledSprite: internally.
  *
- * @param normalSprite CCSprite that is used as button's normal-state graphics. 
- * When compiling for Mac, it is internally duplicated to create the highlighted 
- * sprite.
+ * @see initWithNormalSprite:selectedSprite:disabledSprite:
+ */
+- (id)initWithNormalSprite:(CCSprite *)normalSprite disabledSprite:(CCSprite *)disabledSprite;
+
+/** Convenient init - takes only normal and selected sprites as parameters;
+ * duplicates normal sprite to create disabled sprite and calls 
+ * initWithNormalSprite:selectedSprite:disabledSprite: internally.
  *
- * @param selectedSprite CCSprite that is used as button's selected-state graphics.
+ * @see initWithNormalSprite:selectedSprite:disabledSprite:
  */
 - (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite;
+
+/** Convenient init - takes only normal, selected and disabled sprites as 
+ * parameters; duplicates normal sprite to create highlighted sprite and calls 
+ * initWithNormalSprite:selectedSprite:highlightedSprite:disabledSprite: 
+ * internally.
+ *
+ * @see initWithNormalSprite:selectedSprite:highlightedSprite:disabledSprite: 
+ */
+- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite disabledSprite:(CCSprite *)disabledSprite;
+
+/** Convenient init - takes only normal, selected and highlighted sprites as 
+ * parameters; calls 
+ * initWithNormalSprite:selectedSprite:highlightedSprite:disabledSprite:
+ * internally.
+ *
+ * @see initWithNormalSprite:selectedSprite:highlightedSprite:disabledSprite:
+ */
+- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite;
 
 /** Designated init.
  *
  * @param normalSprite CCSprite that is used as button's normal-state graphics. 
  *
- * @param selectedSprite CCSprite that is used as button's selected-state graphics.
+ * @param selectedSprite CCSprite that is used as button's selected-state
+ * graphics.
  *
  * @param highlightedSprite CCSprite that is used as button's highlighted-state
  * graphics. It is put to use only when compiled for Mac.
+ *
+ * @param disabledSprite CCSprite that is used as button's disabled-state
+ * graphics.
  */
-- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite;
+- (id)initWithNormalSprite:(CCSprite *)normalSprite selectedSprite:(CCSprite *)selectedSprite highlightedSprite:(CCSprite *)highlightedSprite disabledSprite:(CCSprite *)disabledSprite;
 
 #pragma mark Refactored public methods
 
