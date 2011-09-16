@@ -134,14 +134,20 @@
 - (void)setEnabled:(BOOL)enabled {
     if (enabled != enabled_) {
         enabled_ = enabled;
+        // Makes sure button is unselected
         [self unselect];
         
         CCSprite *normalSprite = (CCSprite *)[self getChildByTag:kNormalSpriteTag];
         CCSprite *disabledSprite = (CCSprite *)[self getChildByTag:kDisabledSpriteTag];
         
+        // Sets correct state
         if (!enabled) {
             state_ = CCControlStateDisabled;
         }
+        else {
+            state_ = CCControlStateNormal;
+        }
+        // Shows and hides the appropriate sprites
         normalSprite.visible = enabled;
         disabledSprite.visible = !enabled;
     }
