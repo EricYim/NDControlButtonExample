@@ -126,7 +126,6 @@
 		668A5883141EFA5B00518008 /* HelloWorldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 668A5882141EFA5B00518008 /* HelloWorldLayer.m */; };
 		668A5890141EFAEA00518008 /* CCControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 668A588D141EFAEA00518008 /* CCControl.m */; };
 		668A5891141EFAEA00518008 /* NDControlButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 668A588F141EFAEA00518008 /* NDControlButton.m */; };
-		668A5893141F36CE00518008 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 668A5892141F36CE00518008 /* README */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -368,7 +367,6 @@
 		668A588D141EFAEA00518008 /* CCControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCControl.m; sourceTree = "<group>"; };
 		668A588E141EFAEA00518008 /* NDControlButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDControlButton.h; sourceTree = "<group>"; };
 		668A588F141EFAEA00518008 /* NDControlButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDControlButton.m; sourceTree = "<group>"; };
-		668A5892141F36CE00518008 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -443,7 +441,6 @@
 				668A584D141EFA5A00518008 /* FontLabel */,
 				668A585E141EFA5A00518008 /* TouchJSON */,
 				668A5877141EFA5B00518008 /* Supporting Files */,
-				668A5892141F36CE00518008 /* README */,
 			);
 			path = NDControlButtonExample;
 			sourceTree = "<group>";
@@ -774,7 +771,6 @@
 				668A573E141EFA5600518008 /* Icon.png in Resources */,
 				668A5740141EFA5600518008 /* Icon@2x.png in Resources */,
 				668A5743141EFA5600518008 /* iTunesArtwork in Resources */,
-				668A5893141F36CE00518008 /* README in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -980,6 +976,7 @@
 				668A5889141EFA5B00518008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
