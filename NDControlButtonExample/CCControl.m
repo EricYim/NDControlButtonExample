@@ -115,13 +115,13 @@
         // Initialise instance variables
         state_ = CCControlStateNormal;
         
-        self.enabled = YES;
-        self.selected = NO;
-        self.highlighted = NO;
+        enabled_ = YES;
+        selected_ = NO;
+        highlighted_ = NO;
         
         
         controlPriority_ = kCCMenuTouchPriority;
-        self.anchorPoint = CGPointMake(0.5f, 0.5f);
+        anchorPoint_ = CGPointMake(0.5f, 0.5f);
         
         // Initialise the tables
         dispatchTable_ = [[NSMutableDictionary alloc] initWithCapacity:1];
