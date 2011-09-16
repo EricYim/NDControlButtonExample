@@ -35,7 +35,8 @@
 {
     enum {
         kLabelTag,
-        kButtonTag,
+        kButton1Tag,
+        kButton2Tag,
     }; 
 }
 

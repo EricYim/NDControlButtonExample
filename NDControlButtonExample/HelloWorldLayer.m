@@ -69,25 +69,41 @@
         CCSprite *normal = [CCSprite spriteWithFile:@"Icon-Small.png"];
         CCSprite *selected = [CCSprite spriteWithFile:@"Icon-Small.png"];
         selected.opacity = 180;
-        // create button with above sprites
-        NDControlButton *button = [NDControlButton buttonWithNormalSprite:normal 
+        // create first button with above sprites
+        NDControlButton *button1 = [NDControlButton buttonWithNormalSprite:normal 
                                                            selectedSprite:selected];
         // position button
-        button.position = ccp(0.5 * size.width, 100.0f);
+        button1.position = ccp(0.2 * size.width, 100.0f);
         // add button to layer
-        [self addChild:button z:1 tag:kButtonTag];
+        [self addChild:button1 z:1 tag:kButton1Tag];
         
         // setup event handlers
-        [button addTarget:self action:@selector(touchDown:) forControlEvents:CCControlEventTouchDown];
-        [button addTarget:self action:@selector(touchDragInside:) forControlEvents:CCControlEventTouchDragInside];
-        [button addTarget:self action:@selector(touchDragOutside:) forControlEvents:CCControlEventTouchDragOutside];
-        [button addTarget:self action:@selector(touchDragEnter:) forControlEvents:CCControlEventTouchDragEnter];
-        [button addTarget:self action:@selector(touchDragExit:) forControlEvents:CCControlEventTouchDragExit];
-        [button addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
-        [button addTarget:self action:@selector(touchUpOutside:) forControlEvents:CCControlEventTouchUpOutside];
-        [button addTarget:self action:@selector(touchCancel:) forControlEvents:CCControlEventTouchCancel];
+        [button1 addTarget:self action:@selector(touchDown:) forControlEvents:CCControlEventTouchDown];
+        [button1 addTarget:self action:@selector(touchDragInside:) forControlEvents:CCControlEventTouchDragInside];
+        [button1 addTarget:self action:@selector(touchDragOutside:) forControlEvents:CCControlEventTouchDragOutside];
+        [button1 addTarget:self action:@selector(touchDragEnter:) forControlEvents:CCControlEventTouchDragEnter];
+        [button1 addTarget:self action:@selector(touchDragExit:) forControlEvents:CCControlEventTouchDragExit];
+        [button1 addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
+        [button1 addTarget:self action:@selector(touchUpOutside:) forControlEvents:CCControlEventTouchUpOutside];
+        [button1 addTarget:self action:@selector(touchCancel:) forControlEvents:CCControlEventTouchCancel];
         // NDControlButton doesn't support value changed events
-        [button addTarget:self action:@selector(valueChanged:) forControlEvents:CCControlEventValueChanged];
+        [button1 addTarget:self action:@selector(valueChanged:) forControlEvents:CCControlEventValueChanged];
+        button1.enabled = NO;
+        
+        normal = [CCSprite spriteWithFile:@"Icon-Small.png"];
+        selected = [CCSprite spriteWithFile:@"Icon-Small.png"];
+        // create second button with above sprites
+        // button2 toggles button1 on and off
+        NDControlButton *button2 = [NDControlButton buttonWithNormalSprite:normal 
+                                                            selectedSprite:selected];
+        // position button
+        button2.position = ccp(0.8 * size.width, 100.0f);
+        // add button to layer
+        [self addChild:button2 z:1 tag:kButton2Tag];
+        
+        // setup event handlers
+        [button2 addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
+
 	}
 	return self;
 }
@@ -120,8 +136,15 @@
 }
 
 - (void)touchUpInside:(NDControlButton *)sender {
-    CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
-    label.string = [NSString stringWithFormat:@"Touch up inside."];
+    NDControlButton *button2 = (NDControlButton *)[self getChildByTag:kButton2Tag];
+    if ([sender isEqual:button2]) {
+        NDControlButton *button1 = (NDControlButton *)[self getChildByTag:kButton1Tag];
+        button1.enabled = !button1.enabled;
+    }
+    else {
+        CCLabelTTF *label = (CCLabelTTF *)[self getChildByTag:kLabelTag];
+        label.string = [NSString stringWithFormat:@"Touch up inside."];
+    }
 }
 
 - (void)touchUpOutside:(NDControlButton *)sender {
