@@ -69,15 +69,15 @@
         CCSprite *normal = [CCSprite spriteWithFile:@"Icon-Small.png"];
         CCSprite *selected = [CCSprite spriteWithFile:@"Icon-Small.png"];
         selected.opacity = 180;
-        // create first button with above sprites
+        // Creates button with above sprites
         NDControlButton *button1 = [NDControlButton buttonWithNormalSprite:normal 
                                                            selectedSprite:selected];
-        // position button
+        // Positions button
         button1.position = ccp(0.2 * size.width, 100.0f);
-        // add button to layer
+        // Adds button to layer
         [self addChild:button1 z:1 tag:kButton1Tag];
         
-        // setup event handlers
+        // Sets up event handlers
         [button1 addTarget:self action:@selector(touchDown:) forControlEvents:CCControlEventTouchDown];
         [button1 addTarget:self action:@selector(touchDragInside:) forControlEvents:CCControlEventTouchDragInside];
         [button1 addTarget:self action:@selector(touchDragOutside:) forControlEvents:CCControlEventTouchDragOutside];
@@ -86,23 +86,22 @@
         [button1 addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
         [button1 addTarget:self action:@selector(touchUpOutside:) forControlEvents:CCControlEventTouchUpOutside];
         [button1 addTarget:self action:@selector(touchCancel:) forControlEvents:CCControlEventTouchCancel];
-        // NDControlButton doesn't support value changed events
+        // NDControlButton doesn't respond to value changed events
         [button1 addTarget:self action:@selector(valueChanged:) forControlEvents:CCControlEventValueChanged];
         button1.enabled = NO;
         
         normal = [CCSprite spriteWithFile:@"Icon-Small.png"];
         selected = [CCSprite spriteWithFile:@"Icon-Small.png"];
-        // create second button with above sprites
-        // button2 toggles button1 on and off
-        NDControlButton *button2 = [NDControlButton buttonWithNormalSprite:normal 
+        // Creates a second button that toggles the first button
+        NDControlButton *onOffButton = [NDControlButton buttonWithNormalSprite:normal 
                                                             selectedSprite:selected];
-        // position button
-        button2.position = ccp(0.8 * size.width, 100.0f);
+        // Positions button
+        onOffButton.position = ccp(0.8 * size.width, 100.0f);
         // add button to layer
-        [self addChild:button2 z:1 tag:kButton2Tag];
+        [self addChild:onOffButton z:1 tag:kOnOffButton];
         
-        // setup event handlers
-        [button2 addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
+        // Sets up event handler
+        [onOffButton addTarget:self action:@selector(touchUpInside:) forControlEvents:CCControlEventTouchUpInside];
 
 	}
 	return self;
@@ -136,8 +135,8 @@
 }
 
 - (void)touchUpInside:(NDControlButton *)sender {
-    NDControlButton *button2 = (NDControlButton *)[self getChildByTag:kButton2Tag];
-    if ([sender isEqual:button2]) {
+    NDControlButton *onOffButton = (NDControlButton *)[self getChildByTag:kOnOffButton];
+    if ([sender isEqual:onOffButton]) {
         NDControlButton *button1 = (NDControlButton *)[self getChildByTag:kButton1Tag];
         button1.enabled = !button1.enabled;
     }

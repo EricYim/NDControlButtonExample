@@ -36,7 +36,7 @@
     enum {
         kLabelTag,
         kButton1Tag,
-        kButton2Tag,
+        kOnOffButton,
     }; 
 }
 
